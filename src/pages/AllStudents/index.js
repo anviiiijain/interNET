@@ -3,14 +3,14 @@
  * AllStudents
  *
  */
-import { SideLayout } from "../../components/shared/SideLayout";
 import { Table } from "../../components/shared/Table";
 import React from "react";
 import { studentColumns, studentData } from "./utils";
+import { Layout } from "../../components/shared/Layout";
 
 export function AllStudents(props) {
   return (
-    <SideLayout>
+    <Layout>
       <Table
         columns={studentColumns}
         data={studentData}
@@ -19,6 +19,6 @@ export function AllStudents(props) {
         divider
         headingDivider={false}
       />
-    </SideLayout>
+    </Layout>
   );
 }

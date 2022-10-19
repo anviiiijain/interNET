@@ -5,13 +5,14 @@
  */
 import React, { useState } from "react";
 import { FormGenerator } from "../components/shared/FormGenerator";
-import { SideLayout } from "../components/shared/SideLayout";
+import { Layout } from "../components/shared/Layout";
 
 export function AddReportDetails() {
   const [reportData, setReportData] = useState({
     title: "",
     description: "",
   });
+  const [value, setValue] = useState("");
 
   const AddReportSchema = {
     name: {
@@ -34,7 +35,7 @@ export function AddReportDetails() {
       value: reportData.description,
       onChange: (e) =>
         setReportData({ ...reportData, description: e.target.value }),
-      type: "text",
+      type: "editor",
       required: true,
     },
     dueDate: {
@@ -84,11 +85,11 @@ export function AddReportDetails() {
   };
 
   return (
-    <SideLayout>
+    <Layout>
       <h1 className="text-2xl font-bold text-wider my-5 uppercase text-center">
         Add Report/Assignment
       </h1>
       <FormGenerator formSchema={AddReportSchema} onSubmit="" />
-    </SideLayout>
+    </Layout>
   );
 }

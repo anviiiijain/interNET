@@ -31,7 +31,7 @@ export function ProfilePage(props) {
 
   return (
     <>
-      <Layout user={user}>
+      <Layout>
         {/* AVATAR */}
         <Avatar
           size="xxxxl"

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { CustomButton } from "../../components/shared/CustomButton";
 
 export const studentColumns = [
@@ -47,9 +48,11 @@ export const studentColumns = [
       return (
         <>
           {text && (
-            <CustomButton className="lg:text-lg 2xl:text-xl bg-green-600 focus:bg-green-500 hover:bg-green-500">
-              View
-            </CustomButton>
+            <Link to="/profile">
+              <CustomButton className="lg:text-lg 2xl:text-xl bg-green-600 focus:bg-green-500 hover:bg-green-500">
+                View
+              </CustomButton>
+            </Link>
           )}
         </>
       );

@@ -4,13 +4,13 @@
  *
  */
 import React from "react";
-import { SideLayout } from "../../components/shared/SideLayout";
+import { Layout } from "../../components/shared/Layout";
 import { PDFView } from "../../components/shared/PDFView";
 import { SubmissionsData } from "./utils";
 
 export function ViewAllSubmissions(props) {
   return (
-    <SideLayout>
+    <Layout>
       <h1 className="text-2xl text-light-gray text-center mb-8">
         All Submissions
       </h1>
@@ -34,6 +34,6 @@ export function ViewAllSubmissions(props) {
             </div>
           </>
         ))}
-    </SideLayout>
+    </Layout>
   );
 }

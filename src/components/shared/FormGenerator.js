@@ -9,6 +9,8 @@ import { CustomInput } from "./CustomInput";
 import { CustomMultiSelect } from "./CustomMultiSelect";
 import { CustomButton } from "./CustomButton";
 import { CustomSelect } from "./CustomSelect";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 //    formSchema: any;
 //    onSubmit: any;
@@ -33,6 +35,7 @@ export function FormGenerator(props) {
       elementSchema.type === "text" ||
       elementSchema.type === "email" ||
       elementSchema.type === "password" ||
+      elementSchema.type === "date" ||
       elementSchema.type === "number"
     ) {
       props = {
@@ -71,6 +74,25 @@ export function FormGenerator(props) {
         required: elementSchema.required,
       };
       return <CustomMultiSelect {...props} />;
+    }
+
+    if (elementSchema.type === "editor") {
+      props = {
+        // width: elementSchema?.width,
+        // options: elementSchema.options,
+        className: elementSchema?.className,
+        placeholder: elementSchema.placeholder,
+        value: elementSchema.value,
+        onChange: elementSchema.onChange,
+        required: elementSchema.required,
+      };
+      return (
+        <ReactQuill
+          {...props}
+          theme="snow"
+          className="focus:outline-none focus:ring focus:border-blue-300 rounded-md w-full mb-10"
+        />
+      );
     }
 
     if (elementSchema.type === "button") {
