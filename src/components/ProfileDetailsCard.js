@@ -12,6 +12,9 @@ export function ProfileDetailsCard(props) {
   const { data, columns, heading } = props;
   const [visible, setVisible] = useState(false);
   const type = heading === "Details" ? "personal" : "internship";
+  const details = (column) => {
+    return column?.render(data) ? column?.render(data) : "";
+  };
   return (
     <>
       <Card className="px-12 pt-16 pb-6 rounded-2xl">
@@ -28,14 +31,14 @@ export function ProfileDetailsCard(props) {
           </span>
         </div>
         {/* INFORMATION */}
-        {columns?.map((column) => (
-          <div className="flex justify-between my-3 gap-10">
+        {columns?.map((column, i) => (
+          <div key={i} className="flex justify-between my-3 gap-10">
             <span className="text-text-light font-bold text-xl min-w-max">
-              {column.key.charAt(0).toUpperCase()}
-              {column.key.slice(1)}
+              {column?.key?.charAt(0).toUpperCase()}
+              {column?.key?.slice(1)}
             </span>
             <span className="text-text font-medium text-xl text-right">
-              {column.render(data)}
+              {data && details(column)}
             </span>
           </div>
         ))}

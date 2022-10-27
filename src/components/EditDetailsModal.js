@@ -3,9 +3,11 @@
  * EditDetailsModal
  *
  */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FormGenerator } from "./shared/FormGenerator";
 import { Modal } from "./shared/Modal";
+import { profileActions } from "../features/profileSlice";
 
 //    visible: boolean;
 //    hide: Function;
@@ -13,53 +15,62 @@ import { Modal } from "./shared/Modal";
 
 export function EditDetailsModal(props) {
   const { visible, hide, type } = props;
-  const [personalData, setPersonalData] = useState({
-    name: "",
-    address: "",
-    contact: "",
-    stream: "",
-    section: "",
-    company: "",
-    position: "",
-    mentor: "",
-  });
+  const profile = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
+  const { updatePersonalDetails } = profileActions;
+  const [personalData, setPersonalData] = useState({});
   const InternshipDetailsSchema = {};
   const PersonalDetailsSchema = {
-    name: {
+    first_name: {
       width: "w-1/2",
-      className: "w-1/2 align-self-center",
-      placeholder: "Name",
-      value: personalData.name,
+      className: "w-full align-self-center",
+      placeholder: "First Name",
+      value: personalData.first_name,
+      defaultValue: profile.personalDetails.first_name,
       onChange: (e) =>
-        setPersonalData({ ...personalData, name: e.target.value }),
+        setPersonalData({ ...personalData, first_name: e.target.value }),
       type: "text",
       required: true,
     },
-    contact: {
+    last_name: {
       width: "w-1/2",
-      className: "w-1/2 align-self-center",
-      placeholder: "Contact",
-      value: personalData.contact,
+      className: "w-full align-self-center",
+      placeholder: "Last Name",
+      value: personalData.last_name,
+      defaultValue: profile.personalDetails.last_name,
       onChange: (e) =>
-        setPersonalData({ ...personalData, contact: e.target.value }),
+        setPersonalData({ ...personalData, last_name: e.target.value }),
       type: "text",
       required: true,
     },
     address: {
       width: "w-full",
-      className: "w-1/2 align-self-center",
+      className: "w-full align-self-center",
       placeholder: "Address",
       value: personalData.address,
+      defaultValue: profile.personalDetails.address,
       onChange: (e) =>
         setPersonalData({ ...personalData, address: e.target.value }),
       type: "text",
       required: true,
     },
+    contactNoPrimary: {
+      width: "w-1/2",
+      className: "w-full align-self-center",
+      placeholder: "Contact",
+      value: personalData.contactNoPrimary,
+      defaultValue: profile.personalDetails.contactNoPrimary,
+      onChange: (e) =>
+        setPersonalData({ ...personalData, contactNoPrimary: e.target.value }),
+      type: "text",
+      required: true,
+    },
     stream: {
       width: "w-1/2",
-      className: "w-1/2 align-self-center",
+      className: "w-full align-self-center",
       placeholder: "Stream",
       value: personalData.stream,
+      defaultValue: profile.personalDetails.stream,
       onChange: (e) =>
         setPersonalData({ ...personalData, stream: e.target.value }),
       type: "text",
@@ -67,19 +78,21 @@ export function EditDetailsModal(props) {
     },
     section: {
       width: "w-1/2",
-      className: "w-1/2 align-self-center",
+      className: "w-full align-self-center",
       placeholder: "Section",
       value: personalData.section,
+      defaultValue: profile.personalDetails.section,
       onChange: (e) =>
         setPersonalData({ ...personalData, section: e.target.value }),
       type: "text",
       required: true,
     },
     company: {
-      width: "w-full",
-      className: "w-1/2 align-self-center",
+      width: "w-1/2",
+      className: "w-full align-self-center",
       placeholder: "Company",
       value: personalData.company,
+      defaultValue: profile.personalDetails.company,
       onChange: (e) =>
         setPersonalData({ ...personalData, company: e.target.value }),
       type: "text",
@@ -87,9 +100,10 @@ export function EditDetailsModal(props) {
     },
     position: {
       width: "w-1/2",
-      className: "w-1/2 align-self-center",
+      className: "w-full align-self-center",
       placeholder: "Position",
       value: personalData.position,
+      defaultValue: profile.personalDetails.position,
       onChange: (e) =>
         setPersonalData({ ...personalData, position: e.target.value }),
       type: "text",
@@ -97,9 +111,10 @@ export function EditDetailsModal(props) {
     },
     mentor: {
       width: "w-1/2",
-      className: "w-1/2 align-self-center",
+      className: "w-full align-self-center",
       placeholder: "Mentor",
       value: personalData.mentor,
+      defaultValue: profile.personalDetails.mentor,
       onChange: (e) =>
         setPersonalData({ ...personalData, mentor: e.target.value }),
       type: "text",
@@ -114,6 +129,20 @@ export function EditDetailsModal(props) {
       className: "",
     },
   };
+
+  useEffect(() => {
+    if (!!profile) setPersonalData(profile?.personalDetails);
+  }, [profile]);
+
+  const handlePersonalDetailsSubmit = (e) => {
+    e.preventDefault();
+    hide(false);
+    dispatch(
+      updatePersonalDetails({ ...profile.personalDetails, ...personalData })
+    );
+    setPersonalData({});
+  };
+
   return (
     <Modal
       visible={visible}
@@ -125,10 +154,13 @@ export function EditDetailsModal(props) {
         <FormGenerator
           formHeading="Update Personal Details"
           formSchema={PersonalDetailsSchema}
-          onSubmit=""
+          onSubmit={(e) => handlePersonalDetailsSubmit(e)}
         />
       ) : (
-        <FormGenerator formSchema={InternshipDetailsSchema} onSubmit="" />
+        <FormGenerator
+          formSchema={InternshipDetailsSchema}
+          onSubmit={() => console.log("internshipData", personalData)}
+        />
       )}
     </Modal>
   );

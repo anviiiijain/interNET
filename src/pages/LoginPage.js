@@ -3,13 +3,20 @@
  * LoginPage
  *
  */
+import React, { useEffect, useState } from "react";
 import { Card } from "../components/shared/Card";
 import { FormGenerator } from "../components/shared/FormGenerator";
-import React, { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "../features/authSlice";
 import { ReactComponent as Login } from "../assets/Login.svg";
+import { useNavigate } from "react-router-dom";
 
 export function LoginPage(props) {
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { signinUser } = authActions;
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -44,9 +51,33 @@ export function LoginPage(props) {
     },
   };
 
+  useEffect(() => {
+    // console.log("auth", auth);
+    if (
+      auth.user?.roles?.includes("mentor") ||
+      auth.user?.roles?.includes("admin")
+    ) {
+      navigate("/mentor-dashboard");
+    } else if (auth.user?.roles?.includes("student")) {
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, [auth]);
+
   const onSubmit = (e) => {
     e?.preventDefault();
-    console.log("formData", formData);
+    let data = {
+      ...formData,
+      roles:
+        formData.email === "anviAdmin@gmail.com"
+          ? ["admin"]
+          : formData.email === "anviStudent@gmail.com"
+          ? ["student"]
+          : [],
+    };
+    console.log("formData", data);
+    dispatch(signinUser(data));
   };
 
   return (

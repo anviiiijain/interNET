@@ -20,7 +20,7 @@ export function FaqPage(props) {
           </div>
           {/* FAQS */}
           <div className="">
-            {faqs?.map((faq, i) => (
+            {faqs?.map((faq) => (
               // INDIVIDUAL CARDS
               <AccordionCard heading={faq.question} key={faq.faqId}>
                 <p>{faq.answer}</p>

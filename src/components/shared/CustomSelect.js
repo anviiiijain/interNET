@@ -74,8 +74,9 @@ export function CustomSelect(props) {
           >
             {placeholder}
           </li>
-          {options.map((option) => (
+          {options?.map((option, i) => (
             <li
+              key={i}
               onClick={() => handleSelected(option)}
               className="px-2 py-4 border-b-2 border-gray-200 cursor-pointer capitalize font-semibold text-gray-700"
             >

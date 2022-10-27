@@ -15,15 +15,16 @@ export function ViewAllSubmissions(props) {
         All Submissions
       </h1>
       {SubmissionsData &&
-        SubmissionsData?.map((item) => (
-          <>
+        SubmissionsData?.map((item, i) => (
+          <div key={i}>
             <h2 className="my-3 text-3xl font-semibold text-table uppercase p-2">
               {item.title}
             </h2>
             <div className="flex justify-start flex-wrap gap-y-6 my-6">
               {item.submissions ? (
-                item.submissions?.map((submission) => (
+                item.submissions?.map((submission, i) => (
                   <PDFView
+                    key={i}
                     file={submission.fileLink}
                     name={submission.studentName}
                   />
@@ -32,7 +33,7 @@ export function ViewAllSubmissions(props) {
                 <span>No Submissions yet</span>
               )}
             </div>
-          </>
+          </div>
         ))}
     </Layout>
   );

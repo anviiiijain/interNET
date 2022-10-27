@@ -8,15 +8,18 @@ import cx from "classnames";
 import { Footer } from "./Footer";
 import { Navbar } from "./Navbar";
 import { SideMenu } from "./SideMenu";
+import { useSelector } from "react-redux";
 
 export function Layout(props) {
+  const auth = useSelector((state) => state.auth);
   const { children } = props;
   const [isSideLayoutOpen, setIsSideLayoutOpen] = useState(true);
   const [isSidebarOpen, setIsSideBarOpen] = useState(false);
 
-  let user = "admin";
-
-  if (user === "admin" || user === "mentor") {
+  if (
+    auth.user?.roles?.includes("mentor") ||
+    auth.user?.roles?.includes("admin")
+  ) {
     return (
       <div className="flex relative">
         <div

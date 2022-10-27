@@ -18,8 +18,8 @@ export function MentorDashboard(props) {
       <div>
         <div className="grid grid-cols-2 gap-x-16 gap-y-10 justify-between">
           {/* stats */}
-          {stats?.map(({ title, number }) => (
-            <StatsCard title={title} number={number} />
+          {stats?.map(({ title, number }, i) => (
+            <StatsCard title={title} number={number} key={i} />
           ))}
         </div>
         <div className="my-20">

@@ -88,8 +88,11 @@ export function CustomMultiSelect(props) {
         {/* SELECTED LIST */}
         {value?.length >= 1 && (
           <div className="flex flex-wrap">
-            {value?.map((selectedOption) => (
-              <span className="p-1 my-1 rounded mr-2 list-none bg-primary text-white font-bold">
+            {value?.map((selectedOption, i) => (
+              <span
+                key={i}
+                className="p-1 my-1 rounded mr-2 list-none bg-primary text-white font-bold"
+              >
                 {selectedOption.value}
                 <span
                   className="pl-5 pr-2.5 cursor-pointer"
@@ -110,8 +113,9 @@ export function CustomMultiSelect(props) {
           className={cx("z-20 bg-white rounded shadow absolute right-0", width)}
         >
           <ul className="cursor-pointer capitalize font-semibold text-gray-700 p-4">
-            {visibleOptions?.map((option) => (
+            {visibleOptions?.map((option, i) => (
               <p
+                key={i}
                 className="list-none py-4 border-b-2 border-gray-200"
                 onClick={() => {
                   addOption(option);

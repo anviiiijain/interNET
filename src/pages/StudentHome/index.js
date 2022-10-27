@@ -72,8 +72,12 @@ export function StudentHome(props) {
           {PhasesData?.map((phase, i) => (
             <Tabs.TabContent key={`${i + 1}`} title={phase.title}>
               {/* REPORT ROWS */}
-              {phase?.reports?.map((report) => (
-                <ScheduleRow title={report.title} lastDate={report.lastDate} />
+              {phase?.reports?.map((report, i) => (
+                <ScheduleRow
+                  title={report.title}
+                  lastDate={report.lastDate}
+                  key={i}
+                />
               ))}
             </Tabs.TabContent>
           ))}

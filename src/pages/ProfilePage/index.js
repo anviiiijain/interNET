@@ -3,7 +3,7 @@
  * ProfilePage
  *
  */
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Layout } from "../../components/shared/Layout";
@@ -14,6 +14,9 @@ import { ProfileDetailsCard } from "../../components/ProfileDetailsCard";
 import { AssignmentTable } from "../../components/AssignmentTable";
 import { ReportsTable } from "../../components/ReportsTable";
 import { history } from "../../history";
+import { useSelector, useDispatch } from "react-redux";
+import { profileActions } from "../../features/profileSlice";
+import { useNavigate } from "react-router";
 import {
   ProfileData,
   ProfileDetailColumns,
@@ -24,10 +27,22 @@ import {
 export function ProfilePage(props) {
   const { type } = useParams();
   const [visible, setVisible] = useState(type ? true : false);
+  const profile = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
+  const { getProfile } = profileActions;
 
   let InternshipData;
 
-  let user = "admin";
+  useEffect(() => {
+    dispatch(
+      getProfile({
+        personalDetails: ProfileData,
+        internshipDetails: InternshipData,
+      })
+    );
+  }, []);
+
+  useEffect(() => {}, [profile]);
 
   return (
     <>
@@ -42,14 +57,14 @@ export function ProfilePage(props) {
           {/* PERSONAL DETAILS */}
           <ProfileDetailsCard
             heading="Details"
-            data={ProfileData}
+            data={profile?.personalDetails}
             columns={ProfileDetailColumns}
           />
           {/* INTERNSHIP DETAILS */}
           {InternshipData ? (
             <ProfileDetailsCard
               heading="Internship Details"
-              data={InternshipData}
+              data={profile?.internshipDetails}
               columns={InternshipDetailsColumns}
             />
           ) : (

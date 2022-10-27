@@ -7,10 +7,16 @@ import React from "react";
 import cx from "classnames";
 import { Link } from "react-router-dom";
 import { CustomButton } from "./CustomButton";
+
+import { useDispatch } from "react-redux";
 import { ReactComponent as Logo } from "../../assets/logo-blue.svg";
+import { ReactComponent as LogoutIcon } from "../../assets/LogoutBlue.svg";
+import { authActions } from "../../features/authSlice";
 
 export function Navbar(props) {
   const { open, isOpen } = props;
+  const dispatch = useDispatch();
+  const { signOutUser } = authActions;
 
   return (
     <div>
@@ -79,7 +85,16 @@ export function Navbar(props) {
               Contact
             </Link>
             <Link to="/login">
-              <CustomButton className="m-5">Login</CustomButton>
+              <CustomButton
+                appearance="outlined"
+                className="m-5"
+                onClick={() => dispatch(signOutUser())}
+              >
+                <span className="flex gap-3">
+                  Logout
+                  <LogoutIcon className="transform rotate-180" />
+                </span>
+              </CustomButton>
             </Link>
           </div>
         </div>

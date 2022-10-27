@@ -45,8 +45,9 @@ export function Table(props) {
             {renderColumns && (
               <thead className="">
                 <tr>
-                  {columns?.map((column) => (
+                  {columns?.map((column, i) => (
                     <th
+                      key={i}
                       scope="col"
                       className="py-3 text-left text-sm font-medium uppercase tracking-wider"
                     >
@@ -66,10 +67,13 @@ export function Table(props) {
               })}
             >
               {/* ROWS */}
-              {data?.map((row) => (
-                <tr>
-                  {columns.map((column) => (
-                    <td className="px-6 xl:px-0 py-4 lg:py-6 xl:py-4 whitespace-nowrap">
+              {data?.map((row, i) => (
+                <tr key={i}>
+                  {columns?.map((column, i) => (
+                    <td
+                      key={i}
+                      className="px-6 xl:px-0 py-4 lg:py-6 xl:py-4 whitespace-nowrap"
+                    >
                       {column.render(row[column.key])}
                     </td>
                   ))}

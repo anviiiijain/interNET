@@ -15,8 +15,9 @@ export function ContactCommitteePage(props) {
         Internship Committee
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-2 xl:gap-10 3xl:gap-20 xl:px-10 3xl:px-52">
-        {CommitteeData.map((member) => (
+        {CommitteeData?.map((member, i) => (
           <CommitteeCard
+            key={i}
             name={member.name}
             department={member.department}
             email={member.email}

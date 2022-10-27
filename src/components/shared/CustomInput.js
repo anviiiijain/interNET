@@ -22,6 +22,7 @@ export function CustomInput(props) {
     type = "text",
     onChange,
     required = false,
+    defaultValue,
   } = props;
   return (
     <>
@@ -35,6 +36,7 @@ export function CustomInput(props) {
         value={value}
         onChange={onChange}
         required={required}
+        defaultValue={defaultValue}
       />
     </>
   );

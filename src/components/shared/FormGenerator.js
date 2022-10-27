@@ -45,6 +45,7 @@ export function FormGenerator(props) {
         type: elementSchema.type,
         onChange: elementSchema.onChange,
         required: elementSchema.required,
+        defaultValue: elementSchema.defaultValue,
       };
       return <CustomInput {...props} />;
     }
@@ -121,7 +122,7 @@ export function FormGenerator(props) {
         className={cx(gap, "flex flex-wrap item-center justify-center")}
       >
         {/* FORM ELEMENTS */}
-        {Object.keys(formSchema).map((key, ind) => (
+        {Object.keys(formSchema)?.map((key, ind) => (
           <div
             key={key}
             className={cx(

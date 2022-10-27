@@ -1,7 +1,8 @@
 export const ProfileData = {
-  name: "Kakashi Hatake",
+  first_name: "Kakashi",
+  last_name: "Hatake",
   address: "Hidden Leaf Village, Japan, Asia",
-  contact: "+91 9xxxxxxxxx",
+  contactNoPrimary: "+91 9xxxxxxxxx",
   stream: "Chidori Stream",
   section: "Elite",
   company: "Konoha",
@@ -35,23 +36,23 @@ export const ProfileDetailColumns = [
   },
   {
     key: "stream",
-    render: (value) => "stream",
+    render: (value) => value.stream,
   },
   {
     key: "section",
-    render: (value) => "section",
+    render: (value) => value.section,
   },
   {
     key: "company",
-    render: (value) => "company",
+    render: (value) => value.company,
   },
   {
     key: "position",
-    render: (value) => "position",
+    render: (value) => value.position,
   },
   {
     key: "mentor",
-    render: (value) => "mentor",
+    render: (value) => value.mentor,
   },
 ];
 

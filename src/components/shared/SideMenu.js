@@ -3,8 +3,6 @@
  * SideLayout
  *
  */
-import React, { useState } from "react";
-import cx from "classnames";
 import { Link } from "react-router-dom";
 
 import { ReactComponent as DashboardIcon } from "../../assets/dashboardicon.svg";
@@ -15,8 +13,15 @@ import { ReactComponent as SubmissionsIcon } from "../../assets/submissionsicon.
 import { ReactComponent as CompaniesIcon } from "../../assets/companiesicon.svg";
 import { ReactComponent as FaqIcon } from "../../assets/faqicon.svg";
 import { ReactComponent as Logo } from "../../assets/logo-white.svg";
+import { ReactComponent as LogoutIcon } from "../../assets/Logout.svg";
+import { CustomButton } from "./CustomButton";
+import { authActions } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
 
 export function SideMenu() {
+  const dispatch = useDispatch();
+  const { signOutUser } = authActions;
+
   return (
     <div className="w-full h-full flex flex-col gap-16 py-20 text-white">
       {/* logo */}
@@ -68,6 +73,14 @@ export function SideMenu() {
           </Link>{" "}
         </li>
       </ul>
+      <Link to="/login" className="mx-auto">
+        <CustomButton size="xl" onClick={() => dispatch(signOutUser())}>
+          <span className="flex gap-3">
+            <LogoutIcon />
+            Logout
+          </span>
+        </CustomButton>
+      </Link>
     </div>
   );
 }
