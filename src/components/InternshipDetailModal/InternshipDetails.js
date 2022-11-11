@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FormGenerator } from "../shared/FormGenerator";
 import { useNavigate } from "react-router";
 import { addInternship } from "../../api/student";
+import { getCompanies } from "../../api/company";
 
-export function InternshipDetails(props) {
+export function InternshipDetails() {
 	const navigate = useNavigate();
 	// const { hide } = props;
-	const { companyId } = props;
+	const [companies, setCompanies] = useState([]);
 	const [internshipData, setInternshipData] = useState({
+		companyName: "",
 		role: "",
 		internshipType: "",
 		mode: "",
@@ -33,6 +35,17 @@ export function InternshipDetails(props) {
 		},
 	];
 	const InternshipFormSchema = {
+		companyName: {
+			width: "w-full",
+			className: "w-1/2 align-self-center",
+			placeholder: "Company Name",
+			value: internshipData.companyName,
+			onChange: (value) =>
+				setInternshipData({ ...internshipData, companyName: value }),
+			type: "select",
+			options: companies.map((company) => company.companyName),
+			required: true,
+		},
 		role: {
 			width: "w-full",
 			className: "w-1/2 align-self-center",
@@ -58,9 +71,9 @@ export function InternshipDetails(props) {
 			width: "w-full",
 			className: "w-1/2 align-self-center",
 			placeholder: "Mode of Internship",
-			value: internshipData.modeOfInternship,
+			value: internshipData.mode,
 			onChange: (value) =>
-				setInternshipData({ ...internshipData, modeOfInternship: value }),
+				setInternshipData({ ...internshipData, mode: value }),
 			type: "select",
 			options: ["online", "offline"],
 			required: true,
@@ -71,7 +84,10 @@ export function InternshipDetails(props) {
 			placeholder: "Duration",
 			value: internshipData.total_days,
 			onChange: (value) =>
-				setInternshipData({ ...internshipData, total_days: value }),
+				setInternshipData({
+					...internshipData,
+					total_days: value.target.value,
+				}),
 			type: "text",
 			required: true,
 		},
@@ -96,12 +112,20 @@ export function InternshipDetails(props) {
 		},
 	};
 
+	useEffect(() => {
+		(async () => {
+			const companyData = await getCompanies();
+			console.log("COMPANY DATA", companyData);
+			setCompanies(companyData.data.data);
+		})();
+	}, []);
+
 	const onSubmit = async (e) => {
 		e.preventDefault();
 		const data = {
 			...internshipData,
-			companyId,
 			paid: internshipData.internshipType === "paid" ? true : false,
+			total_days: parseInt(internshipData.total_days),
 		};
 		const res = await addInternship(data);
 		console.log("add internship response", res);

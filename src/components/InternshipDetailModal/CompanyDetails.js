@@ -3,9 +3,8 @@ import { addCompany } from "../../api/student";
 import { FormGenerator } from "../shared/FormGenerator";
 import { useNavigate } from "react-router";
 
-export function CompanyDetails(props) {
+export function CompanyDetails() {
 	const navigate = useNavigate();
-	console.log("PROPS", props);
 	const [companyData, setCompanyData] = useState({
 		companyName: "",
 		registrationNo: "",
@@ -113,21 +112,19 @@ export function CompanyDetails(props) {
 		e.preventDefault();
 		const res = await addCompany(companyData);
 		console.log(res);
-		console.log("SETCOMPANYID", props);
-		// setCompanyId(res.data.companyId);
-		// setCompanyData({
-		// 	companyName: "",
-		// 	registrationNo: "",
-		// 	address: "",
-		// 	city: "",
-		// 	state: "",
-		// 	contactNoPrimary: "",
-		// 	contactNoSecondary: "",
-		// 	email: "",
-		// 	websiteUrl: "",
-		// 	status: "current",
-		// });
-		// navigate("/internshipDetails/2");
+		setCompanyData({
+			companyName: "",
+			registrationNo: "",
+			address: "",
+			city: "",
+			state: "",
+			contactNoPrimary: "",
+			contactNoSecondary: "",
+			email: "",
+			websiteUrl: "",
+			status: "current",
+		});
+		navigate("/internshipDetails/2");
 	};
 
 	return (
