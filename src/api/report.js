@@ -9,3 +9,8 @@ export const addReport = async (payload) => {
 	const res = await axiosInstance.post("/api/admin/add-report", payload);
 	return res;
 };
+
+export const submitReport = async (payload) => {
+	const res = await axiosInstance.post("/api/student/submit-report", payload);
+	return res;
+};

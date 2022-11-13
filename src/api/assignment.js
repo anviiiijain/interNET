@@ -9,3 +9,11 @@ export const addAssignment = async (payload) => {
 	const res = await axiosInstance.post("/api/admin/add-assignment", payload);
 	return res;
 };
+
+export const submitAssignment = async (payload) => {
+	const res = await axiosInstance.post(
+		"/api/student/submit-assignment",
+		payload,
+	);
+	return res;
+};

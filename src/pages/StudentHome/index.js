@@ -14,10 +14,12 @@ import { ReportSubmissonCard } from "../../components/ReportSubmissionCard";
 import { PhasesData } from "./utils";
 import { getReports } from "../../api/report";
 import { getAssignments } from "../../api/assignment";
+import { useNavigate } from "react-router";
 
 function ScheduleRow(props) {
-	const [visible, hide] = useState(false);
-	const { title, lastDate } = props;
+	const navigate = useNavigate();
+
+	const { title, lastDate, status } = props;
 	return (
 		<>
 			<div className='flex flex-wrap justify-between items-center w-11/12 mx-auto my-8'>
@@ -25,18 +27,16 @@ function ScheduleRow(props) {
 				<span className='text-xl md:text-2xl font-medium'>{lastDate}</span>
 				<CustomButton
 					appearance='outlined'
-					onClick={() => hide(true)}
+					onClick={() => {
+						if (status === "Submitted")
+							console.log("REDIRECT TO VIEW SUBMISSION");
+						else navigate("/profile");
+					}}
 					className='w-1/2 md:w-auto my-5'
 				>
-					Submit
+					{status.toLowerCase() === "submitted" ? "View Submission" : "Submit"}
 				</CustomButton>
 			</div>
-			<ReportSubmissonCard
-				submissionName={title}
-				submissionType='report'
-				visible={visible}
-				hide={hide}
-			></ReportSubmissonCard>
 		</>
 	);
 }
@@ -52,6 +52,7 @@ export function StudentHome(props) {
 				return {
 					title: report.reportName,
 					lastDate: report.date,
+					status: report.status,
 				};
 			});
 			setReportData(_reportData);
@@ -60,6 +61,7 @@ export function StudentHome(props) {
 				return {
 					title: assignment.assignmentName,
 					lastDate: assignment.submissionDate,
+					status: assignment.status,
 				};
 			});
 			setAssignmentData(_assignmentData);
@@ -116,6 +118,7 @@ export function StudentHome(props) {
 						{reportData.map((report, i) => (
 							<ScheduleRow
 								title={report.title}
+								status={report.status}
 								lastDate={report.lastDate}
 								key={i}
 							/>
@@ -123,10 +126,11 @@ export function StudentHome(props) {
 					</Tabs.TabContent>
 					<Tabs.TabContent key={2} title={"Assignments"}>
 						{/* ASSIGNMENT ROWS */}
-						{assignmentData.map((report, i) => (
+						{assignmentData.map((assignment, i) => (
 							<ScheduleRow
-								title={report.title}
-								lastDate={report.lastDate}
+								title={assignment.title}
+								status={assignment.status}
+								lastDate={assignment.lastDate}
 								key={i}
 							/>
 						))}

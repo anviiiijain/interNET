@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import cx from "classnames";
 import { Table } from "./shared/Table";
 import { getReports } from "../api/report";
+import { ReportSubmissonCard } from "./ReportSubmissionCard";
 
 const reportData = [
 	{
@@ -31,6 +32,7 @@ const reportData = [
 
 export function ReportsTable(props) {
 	const [reportData, setReportData] = useState();
+	const [visible, hide] = useState(false);
 
 	const reportColumns = [
 		{
@@ -84,20 +86,32 @@ export function ReportsTable(props) {
 		{
 			title: "Report",
 			dataIndex: "status",
-			key: "status",
+			key: "statusAndName",
 			render: function (text) {
 				return (
 					<>
 						{text && (
-							<a
-								className={cx("text-lg lg:text-2xl font-semibold underline", {
-									"text-primary": text.toLowerCase() === "submitted",
-									"text-gray-800": text.toLowerCase() === "pending",
-								})}
-								href='/'
-							>
-								{text === "Submitted" ? "View Report" : "Upload"}
-							</a>
+							<>
+								<button
+									className={cx("text-lg lg:text-2xl font-semibold underline", {
+										"text-primary": text.status.toLowerCase() === "submitted",
+										"text-gray-800": text.status.toLowerCase() === "pending",
+									})}
+									onClick={() => {
+										if (text.status === "Submitted")
+											console.log("REDIRECT TO VIEW REPORT");
+										else hide(true);
+									}}
+								>
+									{text.status === "Submitted" ? "View Report" : "Upload"}
+								</button>
+								<ReportSubmissonCard
+									submissionName={text.name}
+									submissionType='report'
+									visible={visible}
+									hide={hide}
+								></ReportSubmissonCard>
+							</>
 						)}
 					</>
 				);
@@ -109,7 +123,16 @@ export function ReportsTable(props) {
 		(async () => {
 			const reports = await getReports();
 			console.log("REPORTS", reports);
-			setReportData(reports.data.data);
+			const _reportsData = reports.data.data.map((report) => {
+				return {
+					...report,
+					statusAndName: {
+						status: report.status,
+						name: report.reportName,
+					},
+				};
+			});
+			setReportData(_reportsData);
 		})();
 	}, []);
 

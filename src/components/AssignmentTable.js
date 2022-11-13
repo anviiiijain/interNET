@@ -79,7 +79,7 @@ export function AssignmentTable(props) {
 		{
 			title: "Report",
 			dataIndex: "status",
-			key: "status",
+			key: "statusAndName",
 			render: function (text) {
 				return (
 					<>
@@ -87,15 +87,19 @@ export function AssignmentTable(props) {
 							<>
 								<button
 									className={cx("text-lg lg:text-2xl font-semibold underline", {
-										"text-primary": text.toLowerCase() === "submitted",
-										"text-gray-800": text.toLowerCase() === "pending",
+										"text-primary": text.status.toLowerCase() === "submitted",
+										"text-gray-800": text.status.toLowerCase() === "pending",
 									})}
-									onClick={() => hide(true)}
+									onClick={() => {
+										if (text.status === "Submitted")
+											console.log("REDIRECT TO VIEW SUBMISSIOn");
+										else hide(true);
+									}}
 								>
-									{text === "Submitted" ? "View Report" : "Upload"}
+									{text.status === "Submitted" ? "View Report" : "Upload"}
 								</button>
 								<ReportSubmissonCard
-									submissionName={assignmentData.assignmentName}
+									submissionName={text.name}
 									submissionType='assignment'
 									visible={visible}
 									hide={hide}
@@ -111,7 +115,16 @@ export function AssignmentTable(props) {
 	useEffect(() => {
 		(async () => {
 			const assignments = await getAssignments();
-			setAssignmentData(assignments.data.data);
+			const _assignmentData = assignments.data.data.map((assignment) => {
+				return {
+					...assignment,
+					statusAndName: {
+						status: assignment.status,
+						name: assignment.assignmentName,
+					},
+				};
+			});
+			setAssignmentData(_assignmentData);
 		})();
 	}, []);
 
