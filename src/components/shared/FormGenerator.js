@@ -3,40 +3,33 @@
  * FormGenerator
  *
  */
-import React from "react";
-import cx from "classnames";
-import { CustomInput } from "./CustomInput";
-import { CustomMultiSelect } from "./CustomMultiSelect";
-import { CustomButton } from "./CustomButton";
-import { CustomSelect } from "./CustomSelect";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-
-//    formSchema: any;
-//    onSubmit: any;
-//    formHeading?: string;
-//    labelAlign?: 'left' | 'right';
-//    formLayout?: 'horizontal' | 'vertical' | 'inline';
-//    gap?: string;
+import React from 'react'
+import cx from 'classnames'
+import { CustomInput } from './CustomInput'
+import { CustomMultiSelect } from './CustomMultiSelect'
+import { CustomButton } from './CustomButton'
+import { CustomSelect } from './CustomSelect'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 export function FormGenerator(props) {
   const {
     formSchema,
     onSubmit,
-    labelAlign = "left",
+    labelAlign = 'left',
     formHeading,
-    formLayout = "vertical",
-    gap = "gap-y-4",
-  } = props;
+    formLayout = 'vertical',
+    gap = 'gap-y-4',
+  } = props
 
   const getFormElement = (elementSchema) => {
-    let props;
+    let props
     if (
-      elementSchema.type === "text" ||
-      elementSchema.type === "email" ||
-      elementSchema.type === "password" ||
-      elementSchema.type === "date" ||
-      elementSchema.type === "number"
+      elementSchema.type === 'text' ||
+      elementSchema.type === 'email' ||
+      elementSchema.type === 'password' ||
+      elementSchema.type === 'date' ||
+      elementSchema.type === 'number'
     ) {
       props = {
         className: elementSchema.className,
@@ -46,11 +39,11 @@ export function FormGenerator(props) {
         onChange: elementSchema.onChange,
         required: elementSchema.required,
         defaultValue: elementSchema.defaultValue,
-      };
-      return <CustomInput {...props} />;
+      }
+      return <CustomInput {...props} />
     }
 
-    if (elementSchema.type === "select") {
+    if (elementSchema.type === 'select') {
       props = {
         width: elementSchema?.width,
         options: elementSchema.options,
@@ -60,11 +53,11 @@ export function FormGenerator(props) {
         type: elementSchema?.type,
         onChange: elementSchema.onChange,
         required: elementSchema.required,
-      };
-      return <CustomSelect {...props} />;
+      }
+      return <CustomSelect {...props} />
     }
 
-    if (elementSchema.type === "multiselect") {
+    if (elementSchema.type === 'multiselect') {
       props = {
         className: elementSchema?.className,
         placeholder: elementSchema.placeholder,
@@ -73,11 +66,11 @@ export function FormGenerator(props) {
         value: elementSchema.value,
         setValue: elementSchema.setValue,
         required: elementSchema.required,
-      };
-      return <CustomMultiSelect {...props} />;
+      }
+      return <CustomMultiSelect {...props} />
     }
 
-    if (elementSchema.type === "editor") {
+    if (elementSchema.type === 'editor') {
       props = {
         // width: elementSchema?.width,
         // options: elementSchema.options,
@@ -86,17 +79,17 @@ export function FormGenerator(props) {
         value: elementSchema.value,
         onChange: elementSchema.onChange,
         required: elementSchema.required,
-      };
+      }
       return (
         <ReactQuill
           {...props}
-          theme="snow"
-          className="focus:outline-none focus:ring focus:border-blue-300 rounded-md w-full mb-10"
+          theme='snow'
+          className='focus:outline-none focus:ring focus:border-blue-300 rounded-md w-full mb-10'
         />
-      );
+      )
     }
 
-    if (elementSchema.type === "button") {
+    if (elementSchema.type === 'button') {
       props = {
         className: elementSchema.className,
         onClick: elementSchema.onClick,
@@ -107,19 +100,19 @@ export function FormGenerator(props) {
         color: elementSchema.color,
         size: elementSchema.size,
         icon: elementSchema.icon,
-      };
-      return <CustomButton {...props}>{props.text}</CustomButton>;
+      }
+      return <CustomButton {...props}>{props.text}</CustomButton>
     }
-  };
+  }
 
   return (
     <div>
       {formHeading && (
-        <h1 className="text-2xl font-bold text-wider my-5">{formHeading}</h1>
+        <h1 className='text-2xl font-bold text-wider my-5'>{formHeading}</h1>
       )}
       <form
         onSubmit={onSubmit}
-        className={cx(gap, "flex flex-wrap item-center justify-center")}
+        className={cx(gap, 'flex flex-wrap item-center justify-center')}
       >
         {/* FORM ELEMENTS */}
         {Object.keys(formSchema)?.map((key, ind) => (
@@ -127,13 +120,13 @@ export function FormGenerator(props) {
             key={key}
             className={cx(
               {
-                "flex flex-col": formLayout === "vertical",
-                "flex justify-between": formLayout === "horizontal",
-                flex: formLayout === "inline",
+                'flex flex-col': formLayout === 'vertical',
+                'flex justify-between': formLayout === 'horizontal',
+                flex: formLayout === 'inline',
               },
               gap,
               formSchema[key].width,
-              "whitespace-nowrap p-2"
+              'whitespace-nowrap p-2'
             )}
           >
             {/* ELEMENT LABEL */}
@@ -141,22 +134,23 @@ export function FormGenerator(props) {
               <h4
                 className={cx(
                   {
-                    "text-left": labelAlign === "left",
-                    "text-right": labelAlign === "right",
+                    'text-left': labelAlign === 'left',
+                    'text-right': labelAlign === 'right',
                   },
-                  "flex-grow-0 py-2"
+                  'flex-grow-0 py-2'
                 )}
               >
-                <span className="font-semibold tracking-wider text-lg">
+                <span className='font-semibold tracking-wider text-lg'>
                   {formSchema[key].label}:
                 </span>
               </h4>
             )}
             {/* GETTING FORM ELEMENT */}
             {getFormElement(formSchema[key])}
+            {formSchema[key].suffix && <>{formSchema[key].suffix}</>}
           </div>
         ))}
       </form>
     </div>
-  );
+  )
 }

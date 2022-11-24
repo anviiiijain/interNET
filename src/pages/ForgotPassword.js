@@ -10,10 +10,11 @@ import { FormGenerator } from '../components/shared/FormGenerator'
 import { ReactComponent as Login } from '../assets/Login.svg'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { login } from '../api/auth'
+import { forgotPass, login } from '../api/auth'
 import { ACCESS_TOKEN_KEY } from '../constants/accessTokenKey'
+import { toast } from 'react-toastify'
 
-export function LoginPage(props) {
+export function ForgotPassword(props) {
   const navigate = useNavigate()
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -33,22 +34,8 @@ export function LoginPage(props) {
       label: 'Email',
       required: true,
     },
-    password: {
-      width: 'w-full',
-      placeholder: 'Password',
-      value: formData.password,
-      onChange: (e) => setFormData({ ...formData, password: e.target.value }),
-      type: 'password',
-      label: 'Password',
-      required: true,
-      suffix: (
-        <div className='text-right -mt-4 font-bold text-gray-400 text-sm'>
-          <Link to='/forgot-password'>Forgot Password?</Link>
-        </div>
-      ),
-    },
     button: {
-      text: 'Login',
+      text: 'Send',
       type: 'button',
       appearance: 'filled',
       size: 'md',
@@ -57,23 +44,10 @@ export function LoginPage(props) {
     },
   }
 
-  useEffect(() => {
-    if (role === 'admin') {
-      navigate('/mentor-dashboard')
-    } else if (role === 'student') {
-      navigate('/')
-    } else {
-      navigate('/login')
-    }
-  }, [role, navigate])
-
   const onSubmit = async (e) => {
     e?.preventDefault()
-    const res = await login(formData)
-    const token = res.data.data.accessToken
-    localStorage.setItem(ACCESS_TOKEN_KEY, token)
-    setIsLoggedIn(true)
-    setRole(jwt(token).role)
+    const res = await forgotPass(formData)
+    toast.success(res.data.message + ' Please check your email')
   }
 
   return (

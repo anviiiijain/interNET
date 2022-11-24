@@ -8,31 +8,23 @@ import jwt from 'jwt-decode'
 import { Card } from '../components/shared/Card'
 import { FormGenerator } from '../components/shared/FormGenerator'
 import { ReactComponent as Login } from '../assets/Login.svg'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
-import { login } from '../api/auth'
+import { login, resetPass } from '../api/auth'
 import { ACCESS_TOKEN_KEY } from '../constants/accessTokenKey'
+import { toast } from 'react-toastify'
 
-export function LoginPage(props) {
+export function ResetPassword(props) {
   const navigate = useNavigate()
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const req = useLocation().search
   const [role, setRole] = useState(null)
   const [formData, setFormData] = useState({
-    email: '',
     password: '',
+    confirmPassword: '',
   })
 
   const formSchema = {
-    email: {
-      width: 'w-full',
-      placeholder: 'Email',
-      value: formData.email,
-      onChange: (e) => setFormData({ ...formData, email: e.target.value }),
-      type: 'email',
-      label: 'Email',
-      required: true,
-    },
     password: {
       width: 'w-full',
       placeholder: 'Password',
@@ -41,14 +33,19 @@ export function LoginPage(props) {
       type: 'password',
       label: 'Password',
       required: true,
-      suffix: (
-        <div className='text-right -mt-4 font-bold text-gray-400 text-sm'>
-          <Link to='/forgot-password'>Forgot Password?</Link>
-        </div>
-      ),
+    },
+    confirmPassword: {
+      width: 'w-full',
+      placeholder: 'Confirm Password',
+      value: formData.confirmPassword,
+      onChange: (e) =>
+        setFormData({ ...formData, confirmPassword: e.target.value }),
+      type: 'password',
+      label: 'Confirm Password',
+      required: true,
     },
     button: {
-      text: 'Login',
+      text: 'Save',
       type: 'button',
       appearance: 'filled',
       size: 'md',
@@ -57,23 +54,15 @@ export function LoginPage(props) {
     },
   }
 
-  useEffect(() => {
-    if (role === 'admin') {
-      navigate('/mentor-dashboard')
-    } else if (role === 'student') {
-      navigate('/')
-    } else {
-      navigate('/login')
-    }
-  }, [role, navigate])
-
   const onSubmit = async (e) => {
     e?.preventDefault()
-    const res = await login(formData)
-    const token = res.data.data.accessToken
-    localStorage.setItem(ACCESS_TOKEN_KEY, token)
-    setIsLoggedIn(true)
-    setRole(jwt(token).role)
+    const token = req.split('=')[1]
+    const res = await resetPass({ pass: formData.password, token })
+
+    if (res.data.message === 'Success!') {
+      navigate('/login')
+      toast.success('Password reset successful')
+    }
   }
 
   return (
